@@ -117,16 +117,10 @@ class ClassBuilder extends Builder {
     code.writeln('writer');
     code.writeln('..writeByte(${getters.length})');
     for (var field in getters) {
-      if (builtListChecker.isExactlyType(field.type)) {
-        code.writeln('''
-      ..writeByte(${field.index})
-      ..writeList(obj.${field.name}?.toList())''');
-      } else {
-        var value = _convertIterable(field.type, 'obj.${field.name}');
-        code.writeln('''
+      var value = _convertIterable(field.type, 'obj.${field.name}');
+      code.writeln('''
       ..writeByte(${field.index})
       ..write($value)''');
-      }
     }
     code.writeln(';');
 
@@ -135,6 +129,7 @@ class ClassBuilder extends Builder {
 
   String _convertIterable(DartType type, String accessor) {
     if (builtSetChecker.isExactlyType(type) ||
+        builtListChecker.isExactlyType(type) ||
         iterableChecker.isExactlyType(type)) {
       return '$accessor?.toList()';
     } else {
