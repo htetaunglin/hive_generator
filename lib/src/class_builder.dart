@@ -1,11 +1,10 @@
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
+import 'package:built_value/built_value.dart' as built_value;
 import 'package:hive/hive.dart';
 import 'package:hive_generator/src/builder.dart';
-import 'package:hive_generator/src/helper.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:built_collection/built_collection.dart';
 
@@ -15,11 +14,13 @@ class ClassBuilder extends Builder {
   // var mapChecker = const TypeChecker.fromRuntime(Map);
   // var setChecker = const TypeChecker.fromRuntime(Set);
   // var iterableChecker = const TypeChecker.fromRuntime(Iterable);
+
   var builtListChecker = const TypeChecker.fromRuntime(BuiltList);
   var builtMapChecker = const TypeChecker.fromRuntime(BuiltMap);
   var builtSetChecker = const TypeChecker.fromRuntime(BuiltSet);
   var iterableChecker = const TypeChecker.fromRuntime(Iterable);
   var uint8ListChecker = const TypeChecker.fromRuntime(Uint8List);
+  var builtValueChecker = const TypeChecker.fromRuntime(built_value.Built);
 
   ClassBuilder(
       ClassElement cls, List<AdapterField> getters, List<AdapterField> setters)
@@ -61,6 +62,8 @@ class ClassBuilder extends Builder {
       return '${_castIterable(type, variable)}';
     } else if (builtMapChecker.isExactlyType(type)) {
       return '${_castMap(type, variable)}';
+    } else if (builtValueChecker.isExactlyType(type)) {
+      return '$variable as ${type.getDisplayString()}Builder';
     } else {
       return '$variable as ${type.getDisplayString()}';
     }
