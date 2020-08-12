@@ -62,7 +62,9 @@ class ClassBuilder extends Builder {
       return '${_castIterable(type, variable)}';
     } else if (builtMapChecker.isExactlyType(type)) {
       return '${_castMap(type, variable)}';
-    } else if (builtValueChecker.isExactlyType(type)) {
+    } else if (builtValueChecker.isExactlyType(type) ||
+        builtValueChecker.isAssignableFromType(type) ||
+        builtValueChecker.isSuperTypeOf(type)) {
       return '$variable as ${type.getDisplayString()}Builder';
     } else {
       return '$variable as ${type.getDisplayString()}';
