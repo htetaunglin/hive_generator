@@ -65,9 +65,10 @@ class ClassBuilder extends Builder {
     } else if (builtValueChecker.isExactlyType(type) ||
         builtValueChecker.isAssignableFromType(type) ||
         builtValueChecker.isSuperTypeOf(type)) {
-      return '($variable as ${type.getDisplayString()})?.toBuilder()';
+      // ignore: lines_longer_than_80_chars
+      return '($variable as ${type.getDisplayString(withNullability: false)})?.toBuilder()';
     } else {
-      return '$variable as ${type.getDisplayString()}';
+      return '$variable as ${type.getDisplayString(withNullability: false)}';
     }
   }
 
@@ -95,9 +96,10 @@ class ClassBuilder extends Builder {
         cast = 'SetBuilder<$arg>($variable as Set)';
       }
       // return '?.map((dynamic e)=> ${_cast(arg, 'e')})$cast';
-      return cast;
+      return cast.replaceAll('*', '');
     } else {
-      return '($variable as List)?.cast<${arg.getDisplayString()}>()';
+      // ignore: lines_longer_than_80_chars
+      return '($variable as List)?.cast<${arg.getDisplayString(withNullability: false)}>()';
     }
   }
 
@@ -111,7 +113,7 @@ class ClassBuilder extends Builder {
       return 'MapBuilder<$arg1, $arg2>($variable as Map)';
     } else {
       return '''($variable as Map)?
-      .cast<${arg1.getDisplayString()}, ${arg2.getDisplayString()}>()
+      .cast<${arg1.getDisplayString(withNullability: false)}, ${arg2.getDisplayString(withNullability: false)}>()
       ''';
     }
   }
