@@ -65,8 +65,7 @@ class ClassBuilder extends Builder {
     } else if (builtValueChecker.isExactlyType(type) ||
         builtValueChecker.isAssignableFromType(type) ||
         builtValueChecker.isSuperTypeOf(type)) {
-      // ignore: lines_longer_than_80_chars
-      return '($variable as ${type.getDisplayString(withNullability: false)})?.toBuilder()';
+      return '($variable as ${type.getDisplayString()}).toBuilder()';
     } else {
       return '$variable as ${type.getDisplayString(withNullability: false)}';
     }
